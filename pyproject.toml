@@ -1,0 +1,43 @@
+[project]
+name = "assistant-server"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic",
+    "flask",
+    "flask-cors",
+    "flask-login",
+    "google-auth",
+    "google-auth-oauthlib",
+    "google-cloud-speech",
+    "google-cloud-storage",
+    "gunicorn>=25.0.3",
+    "langchain-anthropic>=1.3.4",
+    "langchain-cerebras>=0.8.2",
+    "langchain-core>=1.2.16",
+    "langchain-google-genai>=4.2.1",
+    "langchain-openai>=1.1.10",
+    "mongoengine",
+    "openai",
+    "opentelemetry-api>=1.39.1",
+    "opentelemetry-exporter-otlp>=1.39.1",
+    "opentelemetry-instrumentation-flask>=0.60b1",
+    "opentelemetry-instrumentation-langchain>=0.53.3",
+    "opentelemetry-instrumentation-pymongo>=0.60b1",
+    "opentelemetry-sdk>=1.39.1",
+    "pandas>=3.0.1",
+    "pydantic",
+    "python-dotenv",
+    "requests",
+    "sarvamai",
+    "xai-sdk",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.1",
+    "ruff",
+]
+
+[tool.ruff.lint]
+select = ["I", "F401"]
