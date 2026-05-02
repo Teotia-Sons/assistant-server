@@ -4,7 +4,7 @@ import threading
 from datetime import datetime
 from typing import Generator
 
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, UsageMetadata
 
 from .conversation import (
     generate_title,
@@ -12,13 +12,62 @@ from .conversation import (
     get_next_message_id,
     set_messages,
 )
-from .models import MODEL_PRICING, ModelConfig, ModelTag, get_model
+from .models import ModelConfig, get_model
 
 logger = logging.getLogger(__name__)
 
+MODEL_PRICING = {
+    "grok-4.3": {
+        "input_per_million": 1.25,
+        "cached_per_million": 0.20,
+        "output_per_million": 2.50,
+    },
+    "gemini-3.1-pro-preview": {
+        "input_per_million": 2.0,
+        "output_per_million": 12.0,
+    },
+    "claude-opus-4-7": {
+        "input_per_million": 5.0,
+        "output_per_million": 25.0,
+    },
+    "gpt-5.5": {
+        "input_per_million": 5.0,
+        "output_per_million": 30.0,
+    },
+    "gpt-oss-120b": {
+        "input_per_million": 0.35,
+        "output_per_million": 0.75,
+    },
+    "gemini-3-flash-preview": {
+        "input_per_million": 0.50,
+        "output_per_million": 3.0,
+    },
+}
+
+
+def calculate_pricing(model_name: str, usage_metadata: UsageMetadata) -> dict:
+    pricing = MODEL_PRICING[model_name]
+    input_tokens = usage_metadata["input_tokens"]
+    output_tokens = usage_metadata["output_tokens"]
+
+    cached_tokens = usage_metadata.get("input_token_details", {}).get("cache_read", 0)
+    cached_cost = (cached_tokens / 1_000_000) * pricing.get("cached_per_million", 0)
+
+    non_cached_input_tokens = input_tokens - cached_tokens
+    input_cost = (non_cached_input_tokens / 1_000_000) * pricing["input_per_million"]
+
+    output_cost = (output_tokens / 1_000_000) * pricing["output_per_million"]
+
+    return {
+        "cached": cached_cost,
+        "input": input_cost,
+        "output": output_cost,
+        "total": input_cost + output_cost + cached_cost,
+    }
+
 
 def annotate_ai_message(
-    ai_message: AIMessage, model_tag: ModelTag, invocation_time: datetime
+        ai_message: AIMessage, invocation_time: datetime
 ) -> AIMessage:
     creation_time = datetime.now().astimezone()
     latency = (creation_time - invocation_time).total_seconds()
@@ -30,31 +79,15 @@ def annotate_ai_message(
         "latency": latency,
     }
 
-    model_name = ai_message.response_metadata.get("model_name")
-    if model_name not in MODEL_PRICING:
-        return ai_message
-
-    pricing = MODEL_PRICING[model_name]
     usage_metadata = ai_message.usage_metadata
-    if not usage_metadata:
+    model_name = ai_message.response_metadata.get("model_name")
+    if not usage_metadata or model_name not in MODEL_PRICING:
         return ai_message
-
-    input_tokens = usage_metadata["input_tokens"]
-    output_tokens = usage_metadata["output_tokens"]
-
-    input_cost = (input_tokens / 1_000_000) * pricing["input_per_million"]
-    output_cost = (output_tokens / 1_000_000) * pricing["output_per_million"]
-    total_cost = input_cost + output_cost
 
     ai_message.additional_kwargs = {
         **ai_message.additional_kwargs,
-        "cost": {
-            "input": input_cost,
-            "output": output_cost,
-            "total": total_cost,
-        },
+        "cost": calculate_pricing(model_name, usage_metadata),
     }
-
     return ai_message
 
 
@@ -66,7 +99,7 @@ def _get_system_prompt(key: str) -> str:
 
 
 def generate_response(
-    conversation_id: str, model_config: ModelConfig
+        conversation_id: str, model_config: ModelConfig
 ) -> Generator[dict, None, None]:
     messages = get_messages(conversation_id)
     if not messages:
@@ -84,7 +117,7 @@ def generate_response(
         yield {"type": "message_chunk", "data": chunk.model_dump()}
 
     try:
-        ai_message = annotate_ai_message(ai_message, model_tag, invocation_time)
+        ai_message = annotate_ai_message(ai_message, invocation_time)
     except Exception:
         logger.warning("Failed to annotate AI message cost", exc_info=True)
 

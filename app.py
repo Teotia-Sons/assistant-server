@@ -26,9 +26,9 @@ login_manager.init_app(app)
 @app.before_request
 def require_login():
     if (
-        (not current_user.is_authenticated)
-        and (request.endpoint not in ["auth.login"])
-        and (request.method != "OPTIONS")
+            (not current_user.is_authenticated)
+            and (request.endpoint not in ["auth.login"])
+            and (request.method != "OPTIONS")
     ):
         return login_manager.unauthorized()
 
@@ -38,6 +38,5 @@ def require_login():
 app.register_blueprint(assistant_bp, url_prefix="/assistant")
 app.register_blueprint(auth_bp)
 
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(port=5001, debug=True)

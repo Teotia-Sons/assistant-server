@@ -17,6 +17,7 @@ dependencies = [
     "langchain-core>=1.2.16",
     "langchain-google-genai>=4.2.1",
     "langchain-openai>=1.1.10",
+    "langchain-xai>=1.2.2",
     "mongoengine",
     "openai",
     "opentelemetry-api>=1.39.1",
