@@ -27,7 +27,7 @@ class ModelConfig:
 
 
 def get_model(
-        model_tag: ModelTag, reasoning_effort: Optional[ReasoningEffort] = None
+    model_tag: ModelTag, reasoning_effort: Optional[ReasoningEffort] = None
 ) -> BaseChatModel:
     if model_tag == "GEMINI_PRO":
         model = ChatGoogleGenerativeAI(
@@ -53,10 +53,10 @@ def get_model(
     if model_tag == "OPUS":
         assert reasoning_effort is None
         return ChatAnthropic(
-            model="claude-opus-4-7",
+            model="claude-opus-4-8",
             api_key=Config.ANTHROPIC_API_KEY,
-            thinking={"type": "adaptive"},
-        )
+            thinking={"type": "adaptive", "display": "summarized"},
+        ).bind(cache_control={"type": "ephemeral"})
     if model_tag == "GPT":
         return ChatOpenAI(
             model="gpt-5.5",

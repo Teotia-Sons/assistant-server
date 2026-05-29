@@ -26,9 +26,9 @@ login_manager.init_app(app)
 @app.before_request
 def require_login():
     if (
-            (not current_user.is_authenticated)
-            and (request.endpoint not in ["auth.login"])
-            and (request.method != "OPTIONS")
+        (not current_user.is_authenticated)
+        and (request.endpoint not in ["auth.login"])
+        and (request.method != "OPTIONS")
     ):
         return login_manager.unauthorized()
 

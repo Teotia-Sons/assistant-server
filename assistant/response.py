@@ -26,8 +26,9 @@ MODEL_PRICING = {
         "input_per_million": 2.0,
         "output_per_million": 12.0,
     },
-    "claude-opus-4-7": {
-        "input_per_million": 5.0,
+    "claude-opus-4-8": {
+        "input_per_million": 6.5,
+        "cached_per_million": 0.50,
         "output_per_million": 25.0,
     },
     "gpt-5.5-2026-04-23": {
@@ -67,9 +68,7 @@ def calculate_pricing(model_name: str, usage_metadata: UsageMetadata) -> dict:
     }
 
 
-def annotate_ai_message(
-        ai_message: AIMessage, invocation_time: datetime
-) -> AIMessage:
+def annotate_ai_message(ai_message: AIMessage, invocation_time: datetime) -> AIMessage:
     creation_time = datetime.now().astimezone()
     latency = (creation_time - invocation_time).total_seconds()
 
@@ -99,6 +98,16 @@ def _get_system_prompt(key: str) -> str:
         return f.read()
 
 
+def _clean_ai_message(ai_message: AIMessage) -> AIMessage:
+    if not isinstance(ai_message.content, list):
+        return ai_message
+    ai_message.content = [
+        block for block in ai_message.content
+        if not (isinstance(block, str) and not block.strip())
+    ]
+    return ai_message
+
+
 def generate_response(
         conversation_id: str, model_config: ModelConfig
 ) -> Generator[dict, None, None]:
@@ -123,6 +132,7 @@ def generate_response(
         logger.warning("Failed to annotate AI message cost", exc_info=True)
 
     ai_message.id = get_next_message_id(messages, "ai")
+    ai_message = _clean_ai_message(ai_message)
     messages.append(ai_message)
     conversation = set_messages(conversation_id, messages)
     yield {"type": "conversation", "data": conversation}
