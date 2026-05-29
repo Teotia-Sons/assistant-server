@@ -30,8 +30,9 @@ MODEL_PRICING = {
         "input_per_million": 5.0,
         "output_per_million": 25.0,
     },
-    "gpt-5.5": {
+    "gpt-5.5-2026-04-23": {
         "input_per_million": 5.0,
+        "cached_per_million": 2.50,
         "output_per_million": 30.0,
     },
     "gpt-oss-120b": {
