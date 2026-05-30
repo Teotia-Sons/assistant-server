@@ -56,7 +56,7 @@ def get_model(
             model="claude-opus-4-8",
             api_key=Config.ANTHROPIC_API_KEY,
             thinking={"type": "adaptive", "display": "summarized"},
-        ).bind(cache_control={"type": "ephemeral"})
+        ).bind(cache_control={"type": "ephemeral", "ttl": "1h"})
     if model_tag == "GPT":
         return ChatOpenAI(
             model="gpt-5.5",

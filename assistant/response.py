@@ -27,8 +27,9 @@ MODEL_PRICING = {
         "output_per_million": 12.0,
     },
     "claude-opus-4-8": {
-        "input_per_million": 6.5,
+        "input_per_million": 5.0,
         "cached_per_million": 0.50,
+        "cache_write_per_million": 10.0,
         "output_per_million": 25.0,
     },
     "gpt-5.5-2026-04-23": {
@@ -52,19 +53,24 @@ def calculate_pricing(model_name: str, usage_metadata: UsageMetadata) -> dict:
     input_tokens = usage_metadata["input_tokens"]
     output_tokens = usage_metadata["output_tokens"]
 
-    cached_tokens = usage_metadata.get("input_token_details", {}).get("cache_read", 0)
-    cached_cost = (cached_tokens / 1_000_000) * pricing.get("cached_per_million", 0)
+    input_details = usage_metadata.get("input_token_details", {})
+    cache_read = input_details.get("cache_read", 0) or 0
+    cache_creation = input_details.get("cache_creation", 0) or 0
 
-    non_cached_input_tokens = input_tokens - cached_tokens
+    non_cached_input_tokens = input_tokens - cache_read
     input_cost = (non_cached_input_tokens / 1_000_000) * pricing["input_per_million"]
+
+    cache_read_cost = (cache_read / 1_000_000) * pricing.get("cached_per_million", 0)
+    cache_write_cost = (cache_creation / 1_000_000) * pricing.get("cache_write_per_million", 0)
 
     output_cost = (output_tokens / 1_000_000) * pricing["output_per_million"]
 
     return {
-        "cached": cached_cost,
         "input": input_cost,
         "output": output_cost,
-        "total": input_cost + output_cost + cached_cost,
+        "cache_read": cache_read_cost,
+        "cache_write": cache_write_cost,
+        "total": input_cost + output_cost + cache_read_cost + cache_write_cost,
     }
 
 
