@@ -17,10 +17,10 @@ from .models import ModelConfig, get_model
 logger = logging.getLogger(__name__)
 
 MODEL_PRICING = {
-    "grok-4.3": {
-        "input_per_million": 1.25,
-        "cached_per_million": 0.20,
-        "output_per_million": 2.50,
+    "grok-4.5": {
+        "input_per_million": 2.00,
+        "cached_per_million": 0.50,
+        "output_per_million": 6.00,
     },
     "gemini-3.1-pro-preview": {
         "input_per_million": 2.0,

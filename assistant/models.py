@@ -46,7 +46,7 @@ def get_model(
     if model_tag == "GROK":
         assert reasoning_effort is None
         return ChatXAI(
-            model="grok-4.3",
+            model="grok-4.5",
             api_key=Config.XAI_API_KEY,
             extra_body={"include": ["reasoning.encrypted_content"]},
         )
