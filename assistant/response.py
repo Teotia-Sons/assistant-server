@@ -32,14 +32,32 @@ MODEL_PRICING = {
         "cache_write_per_million": 10.0,
         "output_per_million": 25.0,
     },
-    "gpt-5.5-2026-04-23": {
+    "claude-fable-5": {
+        "input_per_million": 10.0,
+        "cached_per_million": 1.0,
+        "cache_write_per_million": 20.0,
+        "output_per_million": 50.0,
+    },
+    "gpt-5.6-sol": {
         "input_per_million": 5.0,
-        "cached_per_million": 2.50,
+        "cached_per_million": 0.50,
+        "cache_write_per_million": 6.25,
         "output_per_million": 30.0,
+    },
+    "gpt-5.6-luna": {
+        "input_per_million": 1.0,
+        "cached_per_million": 0.10,
+        "cache_write_per_million": 1.25,
+        "output_per_million": 6.0,
     },
     "gpt-oss-120b": {
         "input_per_million": 0.35,
         "output_per_million": 0.75,
+    },
+    "accounts/fireworks/models/glm-5p2": {
+        "input_per_million": 1.40,
+        "cached_per_million": 0.14,
+        "output_per_million": 4.40,
     },
     "gemini-3-flash-preview": {
         "input_per_million": 0.50,
