@@ -96,15 +96,17 @@ def annotate_ai_message(ai_message: AIMessage, invocation_time: datetime) -> AIM
     creation_time = datetime.now().astimezone()
     latency = (creation_time - invocation_time).total_seconds()
 
+    model_name = ai_message.response_metadata.get("model_name")
+
     ai_message.additional_kwargs = {
         **ai_message.additional_kwargs,
         "invocation_time": invocation_time.isoformat(),
         "creation_time": creation_time.isoformat(),
         "latency": latency,
+        "model_name": model_name,
     }
 
     usage_metadata = ai_message.usage_metadata
-    model_name = ai_message.response_metadata.get("model_name")
     if not usage_metadata or model_name not in MODEL_PRICING:
         return ai_message
 
