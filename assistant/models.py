@@ -57,7 +57,7 @@ def get_model(
     if model_tag == "OPUS":
         assert reasoning_effort is None
         return ChatAnthropic(
-            model="claude-opus-4-8",
+            model="claude-opus-5",
             api_key=Config.ANTHROPIC_API_KEY,
             thinking={"type": "adaptive", "display": "summarized"},
         ).bind(cache_control={"type": "ephemeral", "ttl": "1h"})

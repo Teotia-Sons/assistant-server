@@ -26,7 +26,7 @@ MODEL_PRICING = {
         "input_per_million": 2.0,
         "output_per_million": 12.0,
     },
-    "claude-opus-4-8": {
+    "claude-opus-5": {
         "input_per_million": 5.0,
         "cached_per_million": 0.50,
         "cache_write_per_million": 10.0,
