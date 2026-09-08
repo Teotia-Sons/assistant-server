@@ -17,7 +17,7 @@ from .models import ModelConfig, get_model
 logger = logging.getLogger(__name__)
 
 MODEL_PRICING = {
-    "grok-4.5": {
+    "grok-4.6": {
         "input_per_million": 2.00,
         "cached_per_million": 0.50,
         "output_per_million": 6.00,
@@ -32,17 +32,16 @@ MODEL_PRICING = {
         "cache_write_per_million": 10.0,
         "output_per_million": 25.0,
     },
-    "claude-fable-5": {
+    "claude-fable-5-1": {
         "input_per_million": 10.0,
-        "cached_per_million": 1.0,
+        "cached_per_million": 0.25,
         "cache_write_per_million": 20.0,
         "output_per_million": 50.0,
     },
-    "gpt-5.6-sol": {
-        "input_per_million": 5.0,
-        "cached_per_million": 0.50,
-        "cache_write_per_million": 6.25,
-        "output_per_million": 30.0,
+    "gpt-6-astra": {
+        "input_per_million": 10.0,
+        "cached_per_million": 1.0,
+        "output_per_million": 50.0,
     },
     "gpt-5.6-luna": {
         "input_per_million": 1.0,

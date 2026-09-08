@@ -50,7 +50,7 @@ def get_model(
     if model_tag == "GROK":
         assert reasoning_effort is None
         return ChatXAI(
-            model="grok-4.5",
+            model="grok-4.6",
             api_key=Config.XAI_API_KEY,
             extra_body={"include": ["reasoning.encrypted_content"]},
         )
@@ -64,15 +64,15 @@ def get_model(
     if model_tag == "FABLE":
         assert reasoning_effort is None
         return ChatAnthropic(
-            model="claude-fable-5",
+            model="claude-fable-5-1",
             api_key=Config.ANTHROPIC_API_KEY,
             thinking={"type": "adaptive", "display": "summarized"},
         ).bind(cache_control={"type": "ephemeral", "ttl": "1h"})
     if model_tag == "GPT":
+        assert reasoning_effort is None
         return ChatOpenAI(
-            model="gpt-5.6",
+            model="gpt-6-astra",
             api_key=Config.OPENAI_API_KEY,
-            reasoning_effort=reasoning_effort,
             use_responses_api=True,
         )
     if model_tag == "GPT_LUNA":
