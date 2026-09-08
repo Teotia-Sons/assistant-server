@@ -39,4 +39,4 @@ app.register_blueprint(assistant_bp, url_prefix="/assistant")
 app.register_blueprint(auth_bp)
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    app.run(port=5006, debug=True)
