@@ -17,7 +17,7 @@ from .models import ModelConfig, get_model
 logger = logging.getLogger(__name__)
 
 MODEL_PRICING = {
-    "grok-4.6": {
+    "grok-4.7": {
         "input_per_million": 2.00,
         "cached_per_million": 0.50,
         "output_per_million": 6.00,
@@ -26,11 +26,11 @@ MODEL_PRICING = {
         "input_per_million": 2.0,
         "output_per_million": 12.0,
     },
-    "claude-opus-5": {
-        "input_per_million": 5.0,
-        "cached_per_million": 0.50,
-        "cache_write_per_million": 10.0,
-        "output_per_million": 25.0,
+    "claude-opus-5-5": {
+        "input_per_million": 4.0,
+        "cached_per_million": 0.20,
+        "cache_write_per_million": 8.0,
+        "output_per_million": 20.0,
     },
     "claude-fable-5-1": {
         "input_per_million": 10.0,
@@ -43,24 +43,24 @@ MODEL_PRICING = {
         "cached_per_million": 1.0,
         "output_per_million": 50.0,
     },
-    "gpt-5.6-luna": {
-        "input_per_million": 1.0,
-        "cached_per_million": 0.10,
-        "cache_write_per_million": 1.25,
-        "output_per_million": 6.0,
+    "gpt-6-luna": {
+        "input_per_million": 0.10,
+        "cached_per_million": 0.01,
+        "cache_write_per_million": 0.125,
+        "output_per_million": 0.50,
     },
     "gpt-oss-120b": {
         "input_per_million": 0.35,
         "output_per_million": 0.75,
     },
-    "accounts/fireworks/models/glm-5p2": {
+    "accounts/fireworks/models/glm-5p3": {
         "input_per_million": 1.40,
-        "cached_per_million": 0.14,
+        "cached_per_million": 0.26,
         "output_per_million": 4.40,
     },
-    "gemini-3-flash-preview": {
-        "input_per_million": 0.50,
-        "output_per_million": 3.0,
+    "gemini-3.8-flash": {
+        "input_per_million": 0.75,
+        "output_per_million": 3.75,
     },
 }
 
